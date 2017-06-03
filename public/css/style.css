@@ -1,0 +1,29 @@
+body {
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: 0;
+}
+
+#wrapper {
+    padding: 80px;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 60px;
+    text-align: center;
+}
+
+#header {
+}
+
+#footer {
+    margin-top: 120px;
+    font-size: 11px;
+}
+
+#logo {
+    font-size: 50px;
+    font-weight: bold;
+    color: #656565;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,63 @@
+
+/**
+* Sliced PHP MVC Framework
+* v1.1 05/30/2017
+* 
+* Sliced PHP Framework is a very lightweight php framework with mvc and seo friendly url routing
+* capability. The framework consists of only 3 part. The engine, the controller, and the DB
+* class.
+********************************************************************************************/
+
+FILES AND FOLDERS INFORMATION
+
+/framework
+	./class.Controller.php 	:: parent controller class for actions
+	./class.DB.php 			:: database class, MySQL
+	./class.DB_MSSQL.php 	:: database class, MsSQL
+	./class.Engine.php 		:: the main engine doing all the hard work
+
+/protected
+	/components
+		./DefaultComponent.php 	:: optional, this is just another controller which cannot be accessed by any url.
+								You can use a component by calling: Engine::component('/ComponentName/Action');
+		./MoreComponent.php 	:: optionally add more components as needed
+
+	/controllers
+		./MainController.php	:: Main is the default action controller. Index will always be the default action.
+								You can add more action controllers to this directory. The name must end in
+								*Controller.php. Action controller handles url request. For example, if you were to
+								access www.domain.com/about, the engine will execute the AboutController.php executeIndex()
+								function to handle the request.
+		./MoreController.php 	:: optionally add more controllers as needed
+
+	/layouts
+		./default.php 			:: default.php is the default layout for all templates. You can change the layout inside of
+								the controller by calling $this->setLayout('LayoutName.php');
+
+	/models
+		./model.TableModel.php 	:: Database model that inherits from the DB class. Using the model allows you to load, save,
+								and connect to the database with ease. You are not required to use the model. Write your own query if
+								you must.
+
+	/partials
+		/folder/name.php 		:: Indentical to the component, a partial does not handle url request or have any action. If you use
+		./name.php 			    a piece of static code in alot of places, it's nice to have them in the partial and call
+								Engine::partial('FolderName/PartialName.php'); or Engine::partial('PartialName.php');
+
+	/views						:: controllers set the view and view handles the display of a url request. There are 3 default views.
+								default.php. 404.php, and offline.php
+		./offline.php 			:: The view to display when you set the website engine offline.
+		./default.php 			:: This is the default view. Your homepage.
+		./404.php 				:: The 404 page cannot be found view.
+		/folder/name.php  		:: optionally add more view as needed. Views can be set in the controller by calling
+								$this->render('folder/name');
+/batch
+	./script.php 				:: optionally, place all your batch and cron scripts here
+
+/public 						:: public folders, your domain root should be pointed to the /public directory so people cannot access
+								the framework and protected directory containing your code base.
+	/css
+	/img
+	/js
+	./index.php
+
