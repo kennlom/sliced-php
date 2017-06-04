@@ -1,5 +1,5 @@
 # sliced-php
-Sliced PHP is a very lightweight and performance oriented PHP MVC framework with routing, basic database orm, and autoloading capabilities.
+Sliced PHP is a super lightweight and performance oriented PHP MVC framework with routing, database orm, templating, and autoloading capabilities.
 
 ## Getting Started
 To start using sliced-php, upload the repository to your server and edit the configurations in `class.Config.php`. Update the path to where you saved the repository.
