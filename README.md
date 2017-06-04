@@ -170,17 +170,16 @@ When the controller calls `$this->render('template_name');`, all the variables y
 
 > /protected/views/hello/about.php
 ```
-Welcome to Sliced PHP: 
-<?=
-    // echo out the variable we set in the controller
-    $greeting;
-?>
+Welcome to Sliced PHP: {{greeting}}
 ```
 
 ### Other things you can do inside the view templates
 *Echo or display the variable you set inside the controller*
 ```
-<?= $variableName1 ?>
+Hi, your name is: <?= $variableName1 ?>
+```
+```
+Hi, your name is: {{variableName1}}
 ```
 
 *Include a partial with other commonly used html template you created*
