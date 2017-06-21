@@ -54,7 +54,4 @@
 		public function executeOffline() {
 			$this->setTitle('Currently Offline')->render('offline');
 		}
-
-
-
 	}
