@@ -15,13 +15,13 @@
      * @license     http://framework.updateflow.com/license
      * @see         http://framework.updateflow.com/
      */
-	class Engine
-	{
+    class Engine
+    {
         public static $AutoloadCache;
         public static $SessionData;		# unserialized array
         public static $SessionStarted;	# (true | false)
 
-		/**
+        /**
          * Engine constructor
          */
         public function __construct() {
