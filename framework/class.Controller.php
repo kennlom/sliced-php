@@ -13,7 +13,7 @@
      * @see         http://www.updateflow.com/sliced-php
      */
 	class Controller
-    {
+	{
 		private $_layout	= 'default';
 		private $_template	= 'default';
 		private $_title		= '';
