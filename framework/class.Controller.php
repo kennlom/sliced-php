@@ -65,7 +65,7 @@
 		public function getArgument($i=0) {
 			return isset($this->_arguments[$i]) ? $this->_arguments[$i] : NULL;
 		}
-				
+	
         /**
          * Forward to another action to handle the request
          *
