@@ -36,16 +36,18 @@ FILES AND FOLDERS INFORMATION
 
 	/models
 		./model.TableModel.php 	:: Database model that inherits from the DB class. Using the model allows you to load, save,
-								and connect to the database with ease. You are not required to use the model. Write your own query if
-								you must.
+								and connect to the database with ease. You are not required to use the model.
+								Write your own query if you must.
 
 	/partials
 		/folder/name.php 		:: Indentical to the component, a partial does not handle url request or have any action. If you use
 		./name.php 			    a piece of static code in alot of places, it's nice to have them in the partial and call
 								Engine::partial('FolderName/PartialName.php'); or Engine::partial('PartialName.php');
 
-	/views						:: controllers set the view and view handles the display of a url request. There are 3 default views.
+	/views						:: controllers set the view and view handles the display of a url request.
+								There are 3 default views.
 								default.php. 404.php, and offline.php
+								
 		./offline.php 			:: The view to display when you set the website engine offline.
 		./default.php 			:: This is the default view. Your homepage.
 		./404.php 				:: The 404 page cannot be found view.
