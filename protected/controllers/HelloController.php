@@ -41,5 +41,4 @@
                 ->set('greeting', "We're inside /home/about!")
                 ->render('hello/about');
         }
-
 	}
