@@ -9,7 +9,7 @@
 
     /**
      * Framework Engine
-	 *
+     *
      * @package     App
      * @copyright   Copyright (c) 2017 Oanh, Inc. (http://www.updateflow.com)
      * @license     http://framework.updateflow.com/license
@@ -17,173 +17,173 @@
      */
 	class Engine
 	{
-		public static $AutoloadCache;
+        public static $AutoloadCache;
         public static $SessionData;		# unserialized array
-		public static $SessionStarted;	# (true | false)
+        public static $SessionStarted;	# (true | false)
 
 		/**
          * Engine constructor
          */
-		public function __construct() {
-		}
+        public function __construct() {
+        }
 
         /**
 		 * Autoloader
          *
          * @param $class
          */
-		public static function Autoload($class)
-		{
-			// Remove namespace from class name
-			$class = str_replace(__NAMESPACE__.'\\', '', $class);
+        public static function Autoload($class)
+        {
+            // Remove namespace from class name
+            $class = str_replace(__NAMESPACE__.'\\', '', $class);
 
-			# Get the autoload config cache (to avoid directory lookup)
-			$AutoloadCache = self::GetAutoloadCache();
+            # Get the autoload config cache (to avoid directory lookup)
+            $AutoloadCache = self::GetAutoloadCache();
 
-			if($AutoloadCache && isset($AutoloadCache[$class]))
-			{
-				require($AutoloadCache[$class]);
-				return true;
-			}
-			else
-			{
+            if($AutoloadCache && isset($AutoloadCache[$class]))
+            {
+                require($AutoloadCache[$class]);
+                return true;
+            }
+            else
+            {
                 /*``
                 ` There is no cache, we have to do the slow method of checking each directory
                 ` for the file we need. Check for autoloading to framework related classes first
                 ````````````````````````````````````````````````````````````````````````````*/;
-				foreach(Config::$autoloadDirs as $directory)
-				{
-					if(is_file("{$directory['dir']}/{$directory['prefix']}{$class}.php")) {
-						require("{$directory['dir']}/{$directory['prefix']}{$class}.php");
-						return true;
-						break;
-					}
-				}
-			}
+                foreach(Config::$autoloadDirs as $directory)
+                {
+                    if(is_file("{$directory['dir']}/{$directory['prefix']}{$class}.php")) {
+                        require("{$directory['dir']}/{$directory['prefix']}{$class}.php");
+                        return true;
+                        break;
+                    }
+                }
+            }
 		}
 
-		/**
+        /**
          * Load configuration file
          */
-		private static function LoadConfig() {
-			require_once(dirname(__FILE__) .'/class.Config.php');
-		}
-
-		/**
-		* Initialize
-		*/
-		public static function Init()
-		{
-			# Load Config
-			self::LoadConfig();
-
-			# Get the autoload config cache (to avoid directory lookup)
-			$AutoloadCache = Engine::GetAutoloadCache();
-
-			# Load required core controllers
-			require($AutoloadCache['Controller']);
-		}
+        private static function LoadConfig() {
+            require_once(dirname(__FILE__) .'/class.Config.php');
+        }
 
         /**
-		 * Get autoload cache
-		 *
+        * Initialize
+        */
+        public static function Init()
+        {
+            # Load Config
+            self::LoadConfig();
+
+            # Get the autoload config cache (to avoid directory lookup)
+            $AutoloadCache = Engine::GetAutoloadCache();
+
+            # Load required core controllers
+            require($AutoloadCache['Controller']);
+        }
+
+        /**
+         * Get autoload cache
+         *
          * @return mixed
          */
-		public static function GetAutoloadCache()
-		{
-			# The autoload cache is stored in /cache/autoload.php
-			# The file can be generated automatically by running 'build_autoload_cache.php' in /batch
-			# Make sure you specify all your autoload directories in config.php
-			if(isset(self::$AutoloadCache))
-				return self::$AutoloadCache;
+        public static function GetAutoloadCache()
+        {
+            # The autoload cache is stored in /cache/autoload.php
+            # The file can be generated automatically by running 'build_autoload_cache.php' in /batch
+            # Make sure you specify all your autoload directories in config.php
+            if(isset(self::$AutoloadCache))
+                return self::$AutoloadCache;
 
-			$autoload = require_once(Config::$frameworkDir .'/cache/autoload.php');
+            $autoload = require_once(Config::$frameworkDir .'/cache/autoload.php');
 
-			self::$AutoloadCache = $autoload;
-			return $autoload;
-		}
+            self::$AutoloadCache = $autoload;
+            return $autoload;
+        }
 
         /**
-		 * Render final layout
-		 *
+         * Render final layout
+         *
          * @param $controller
          * @param $layout
          * @param $template
          */
-		public static function render($controller, $layout, $template) {
-			header('Content-type: text/html; charset=UTF-8');
+        public static function render($controller, $layout, $template) {
+            header('Content-type: text/html; charset=UTF-8');
 
-			if($template) $controller->pageTemplate = Config::$templatePath.$template.'.php';
-			$parent = &$controller;
+            if($template) $controller->pageTemplate = Config::$templatePath.$template.'.php';
+            $parent = &$controller;
 
-			if($layout)			require(Config::$layoutPath.$layout.'.php');
-			elseif($template)	require(Config::$templatePath.$template.'.php');
-		}
+            if($layout)			require(Config::$layoutPath.$layout.'.php');
+            elseif($template)	require(Config::$templatePath.$template.'.php');
+        }
 		
         /**
-		 * Get file content
-		 *
+         * Get file content
+         *
          * @param       $filepath
          * @param array $variables
          */
-		public static function load($filepath, $variables=array()) {
-			extract($variables);
-			include($filepath);
-		}
+        public static function load($filepath, $variables=array()) {
+            extract($variables);
+            include($filepath);
+        }
 		
         /**
-		 * Render partial
-		 *
+         * Render partial
+         *
          * @param       $filepath
          * @param array $variables
          */
-		public static function partial($filepath, $variables=array()) {
-			self::load(Config::$partialPath.$filepath, $variables);
-		}
-		
+        public static function partial($filepath, $variables=array()) {
+            self::load(Config::$partialPath.$filepath, $variables);
+        }
+
         /**
-		 * Render component
-		 *
+         * Render component
+         *
          * @param $path
          */
-		public static function component($path)
-		{
-			$path	= explode('/', trim($path, '/'));
-			$module	= @$path[0] ? $path[0] : 'Main';
-			$action	= @$path[1] ? $path[1] : 'Index';
-	
-			$componentName	= self::getCleanName($module).'Component';
-			$actionName		= self::getCleanName($action);
+        public static function component($path)
+        {
+            $path	= explode('/', trim($path, '/'));
+            $module	= isset($path[0]) ? $path[0] : 'Main';
+            $action	= isset($path[1]) ? $path[1] : 'Index';
 
-			# unset($path[0], $path[1]);
-			# $vars = array_values($path);
-			$vars = false;
+            $componentName	= self::getCleanName($module).'Component';
+            $actionName		= self::getCleanName($action);
 
-			if(self::class_exists($componentName, true)) {
-				$component = new $componentName;
-				$component->setArguments($vars)->forward($actionName);
-			} else {
-				throw new Exception('Call to an unknown component');
-			}
-		}
+            # unset($path[0], $path[1]);
+            # $vars = array_values($path);
+            $vars = false;
+
+            if(self::class_exists($componentName, true)) {
+                $component = new $componentName;
+                $component->setArguments($vars)->forward($actionName);
+            } else {
+                throw new Exception('Call to an unknown component');
+            }
+        }
 
         /**
-		 * Get clean module name
-		 *
+         * Get clean module name
+         *
          * @param $name
          * @return string
          */
-		private static function getCleanName($name)
-		{
-			$cleanName	= '';
-			$name 		= explode('_', $name);
-			
-			foreach($name as $part) {
-				$cleanName .= ucwords(strtolower($part));
-			}
+        private static function getCleanName($name)
+        {
+            $cleanName	= '';
+            $name 		= explode('_', $name);
 
-			return $cleanName;
-		}
+            foreach($name as $part) {
+                $cleanName .= ucwords(strtolower($part));
+            }
+
+            return $cleanName;
+        }
 
         /**
 		 * Check to see if class exists / loaded
@@ -193,21 +193,21 @@
          * @param bool $autoload
          * @return bool
          */
-		public static function class_exists($class, $autoload=false)
-		{
-			# List of all classes already loaded
-			static $_loadClasses = array();
+        public static function class_exists($class, $autoload=false)
+        {
+            # List of all classes already loaded
+            static $_loadClasses = array();
 
-			if(isset($_loadClasses[$class]))
-				return true;
+            if(isset($_loadClasses[$class]))
+                return true;
 
-			// Let's attempt to load the class
-			if($autoload === true)
-				return self::Autoload($class);
+            // Let's attempt to load the class
+            if($autoload === true)
+                return self::Autoload($class);
 
-			// We didn't load the class
-			return false;
-		}
+            // We didn't load the class
+            return false;
+        }
 		
         /**
          * Start session
