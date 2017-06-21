@@ -41,7 +41,7 @@
             array('dir'=> '/home/slicedphp/protected/components/', 	'prefix'=>''),
             array('dir'=> '/home/slicedphp/protected/models/', 		'prefix'=>'model.'),
             array('dir'=> '/home/slicedphp/protected/classes/', 	'prefix'=>'class.'),
-            array('dir'=> '/home/slicedphp/framework/',             'prefix'=>'class.')
+            array('dir'=> '/home/slicedphp/framework/',                 'prefix'=>'class.')
         );
 
 
