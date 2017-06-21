@@ -20,19 +20,19 @@
 		 */
 		public function executeIndex()
 		{
-            // Want to redirect? Sample redirect to /about
-            // $this->redirect('/about');
+			// Want to redirect? Sample redirect to /about
+			// $this->redirect('/about');
 
-            // Want to render json data?
-            // $this->renderJson(array(
-            //     'test' => 123,
-            // ));
+			// Want to render json data?
+			// $this->renderJson(array(
+			//     'test' => 123,
+			// ));
 
 			$this
 				->setTitle(Config::$WebsiteTitle)
 				->set('variable1', 'It Works!')
-                ->set('variable2', 'Simple')
-                ->set('variable3', SampleClass::getGreeting()) // sample autoloaded class
+				->set('variable2', 'Simple')
+				->set('variable3', SampleClass::getGreeting()) // sample autoloaded class
 				->render('default');
 		}
 
