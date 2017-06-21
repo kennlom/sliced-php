@@ -1,6 +1,6 @@
 <?php
 
-	namespace App;
+    namespace App;
 
     spl_autoload_register(array('App\Engine', 'Autoload'));
 
