@@ -176,7 +176,7 @@
         private static function getCleanName($name)
         {
             $cleanName	= '';
-            $name 		= explode('_', $name);
+            $name       = explode('_', $name);
 
             foreach($name as $part) {
                 $cleanName .= ucwords(strtolower($part));
@@ -186,9 +186,9 @@
         }
 
         /**
-		 * Check to see if class exists / loaded
+         * Check to see if class exists / loaded
          * Implemented this way for higher performance
-		 *
+         *
          * @param      $class
          * @param bool $autoload
          * @return bool
@@ -213,11 +213,11 @@
          * Start session
          * @todo: possibly want to re-visit this when we want to store session data in Redis
          */
-		public static function StartSession()
-		{
-			# Using php session for now until we decide to switch to something else
-			# session_start();
-			# session_write_close();
+        public static function StartSession()
+        {
+            # Using php session for now until we decide to switch to something else
+            # session_start();
+            # session_write_close();
 
 			if(! self::$SessionStarted)
 			{
@@ -227,234 +227,234 @@
                 self::$SessionStarted   = true;
 
                 /*
-				try
-				{		
-					$sessionId = $_COOKIE['@'];
+                try
+                {		
+                    $sessionId = $_COOKIE['@'];
 
-					if($sessionId)
-					{
-						$redis = new Redis();
-						$redis->pconnect('127.0.0.1', 6379);
-						$data = $redis->get('@'.$sessionId);
+                    if($sessionId)
+                    {
+                        $redis = new Redis();
+                        $redis->pconnect('127.0.0.1', 6379);
+                        $data = $redis->get('@'.$sessionId);
 
-						// Save the session data for this instance
-						self::$SessionData = unserialize($data);
-					}
-					else
-					{
-						$sessionId = uniqid('', true);
-						setcookie('@', $sessionId, time()+60*60*24*30, '/', '.rookiepro.com');
-					}
+                        // Save the session data for this instance
+                        self::$SessionData = unserialize($data);
+                    }
+                    else
+                    {
+                        $sessionId = uniqid('', true);
+                        setcookie('@', $sessionId, time()+60*60*24*30, '/', '.rookiepro.com');
+                    }
 
-				} catch(Exception $e){
-					// handle error
-				}
+                } catch(Exception $e){
+                    // handle error
+                }
                 */
-			}
+            }
 		}
 		
         /**
          * Save session
          * @todo: possibly want to re-visit this when we want to store session data in Redis
          */
-		public static function SaveSession()
-		{
-		    /*
-			$sessionId = $_COOKIE['@'];
+        public static function SaveSession()
+        {
+            /*
+            $sessionId = $_COOKIE['@'];
 
-			// Only save if we have a valid session id
-			if($sessionId)
-			{
-				$redis = new Redis();
-				$redis->pconnect('127.0.0.1', 6379);
-				$redis->set('@'.$sessionId, serialize(self::$SessionData));
-			}
-		    */
+            // Only save if we have a valid session id
+            if($sessionId)
+            {
+                $redis = new Redis();
+                $redis->pconnect('127.0.0.1', 6379);
+                $redis->set('@'.$sessionId, serialize(self::$SessionData));
+            }
+            */
             foreach (self::$SessionData as $name => $value)
             {
                 $_SESSION[$name] = $value;
-		    }
-		}
+            }
+        }
 
         /**
          * End session
          */
-		public static function EndSession()
-		{
-		    /*
-			$sessionId = $_COOKIE['@'];
+        public static function EndSession()
+        {
+            /*
+            $sessionId = $_COOKIE['@'];
 
-			if($sessionId)
-			{
-				$redis = new Redis();
-				$redis->pconnect('127.0.0.1', 6379);
-				$redis->delete('@'.$sessionId);
+            if($sessionId)
+            {
+                $redis = new Redis();
+                $redis->pconnect('127.0.0.1', 6379);
+                $redis->delete('@'.$sessionId);
 
-				setcookie('@', '', time()-86400);
-			}
-		    */
+                setcookie('@', '', time()-86400);
+            }
+            */
 
-			# Using php session for now until we decide to switch to something else
-			session_destroy();
-		}
+            # Using php session for now until we decide to switch to something else
+            session_destroy();
+        }
 
         /**
-		 * Get url requested path info
-		 *
+         * Get url requested path info
+         *
          * @return mixed
          */
-		public static function GetPathInfo() {
-			# Since web servers are inconsistence at providing the $_SERVER['PATH_INFO'] variable,
-			# we are going to use the $_SERVER['REQUEST_URI'] variable and parse it down.
-			# This method seems to be more reliable as apache / lighttpd / nginx can all produce different
-			# results for PATH_INFO, or none at all.
-			$uri = explode('?', $_SERVER['REQUEST_URI']); # split by ?
-			return $uri[0];
-		}
+        public static function GetPathInfo() {
+            # Since web servers are inconsistence at providing the $_SERVER['PATH_INFO'] variable,
+            # we are going to use the $_SERVER['REQUEST_URI'] variable and parse it down.
+            # This method seems to be more reliable as apache / lighttpd / nginx can all produce different
+            # results for PATH_INFO, or none at all.
+            $uri = explode('?', $_SERVER['REQUEST_URI']); # split by ?
+            return $uri[0];
+        }
 
         /**
          * Run engine
          */
-		public static function run()
-		{
-			//$startTime = microtime(true);
-			self::Init();
-			self::StartSession();
+        public static function run()
+        {
+            //$startTime = microtime(true);
+            self::Init();
+            self::StartSession();
 
 
-			if(Config::$IsOffline) {
-				(new MainController)->forward('offline'); return;
-			}
+            if(Config::$IsOffline) {
+                (new MainController)->forward('offline'); return;
+            }
 
-			if(Config::$DisplayWarnings == false)
-				error_reporting(E_ERROR);
-
-
+            if(Config::$DisplayWarnings == false)
+                error_reporting(E_ERROR);
 
 
-			ob_start();
-			//header('Content-type: text/html; charset=UTF-8');
-
-			/*``
-			` Determine module and action
-			`````````````````````````````````````````````````````*/
-			$path	= explode('/', trim(self::GetPathInfo(), '/'));
-			$module	= @$path[0] ? $path[0] : 'Main';
-			$action	= @$path[1] ? $path[1] : 'Index';
-	
-			$controllerName = self::getCleanName($module).'Controller';
-			$actionName		= self::getCleanName($action);
-
-			unset($path[0], $path[1]);
-			$vars = array_values($path);
 
 
-			/*``
-			` Forward to the proper controller to handle request
-			`````````````````````````````````````````````````````*/
-			if(self::class_exists($controllerName, true))
-			{
-				$class = __NAMESPACE__  . "\\$controllerName";
-				(new $class)->setArguments($vars)->forward($actionName);
+            ob_start();
+            //header('Content-type: text/html; charset=UTF-8');
 
-			} else {
-				//-self::class_exists('MainController', true);
-				MainController::this()->forward('404');	
-			}
+            /*``
+            ` Determine module and action
+            `````````````````````````````````````````````````````*/
+            $path	= explode('/', trim(self::GetPathInfo(), '/'));
+            $module	= @$path[0] ? $path[0] : 'Main';
+            $action	= @$path[1] ? $path[1] : 'Index';
 
+            $controllerName = self::getCleanName($module).'Controller';
+            $actionName		= self::getCleanName($action);
 
-			/*``
-			` Get the output buffer so we can minify it
-			`````````````````````````````````````````````````````*/
-			$html = ob_get_clean();
-
-			# Enable gzip compression on the php side
-			if(Config::$EnableGzip && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
-				ob_start('ob_gzhandler');
-			} else
-				ob_start();
+            unset($path[0], $path[1]);
+            $vars = array_values($path);
 
 
-			echo self::minify($html, Config::$MinifyOutput);
-			ob_end_flush();
+            /*``
+            ` Forward to the proper controller to handle request
+            `````````````````````````````````````````````````````*/
+            if(self::class_exists($controllerName, true))
+            {
+                $class = __NAMESPACE__  . "\\$controllerName";
+                (new $class)->setArguments($vars)->forward($actionName);
+
+            } else {
+                //-self::class_exists('MainController', true);
+                MainController::this()->forward('404');	
+            }
 
 
-			/*``
-			` Print out page execution time
-			`````````````````````````````````````````````````````*/
-			// echo sprintf('%f', (microtime(true)-$startTime));
+            /*``
+            ` Get the output buffer so we can minify it
+            `````````````````````````````````````````````````````*/
+            $html = ob_get_clean();
+
+            # Enable gzip compression on the php side
+            if(Config::$EnableGzip && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+                ob_start('ob_gzhandler');
+            } else
+                ob_start();
+
+
+            echo self::minify($html, Config::$MinifyOutput);
+            ob_end_flush();
+
+
+            /*``
+            ` Print out page execution time
+            `````````````````````````````````````````````````````*/
+            // echo sprintf('%f', (microtime(true)-$startTime));
 		}
 
         /**
-		 * Minify output
+         * Minify output
          * @param      $source
          * @param bool $run
          * @return mixed|string
          */
-		public static function minify($source, $run=true)
-		{
-			if($run == false) return $source;
+        public static function minify($source, $run=true)
+        {
+            if($run == false) return $source;
 
 
 
-			# Removing comments is only used for bandwidth and page load performance and not required
-			# If removing html comments is causing problems for you, you can disable this
-			$source = self::RemoveComments($source);
+            # Removing comments is only used for bandwidth and page load performance and not required
+            # If removing html comments is causing problems for you, you can disable this
+            $source = self::RemoveComments($source);
 
 
-			# For more info check out:
-			# http://stackoverflow.com/questions/5312349/minifying-final-html-output-using-regular-expressions-with-codeigniter
-			
-			// Set PCRE recursion limit to sane value = STACKSIZE / 500
-			// ini_set("pcre.recursion_limit", "524"); // 256KB stack. Win32 Apache
-			ini_set("pcre.recursion_limit", "16777");  // 8MB stack. *nix		
-		
-		    $regex = '%# Collapse whitespace everywhere but in blacklisted elements.
-		        (?>             # Match all whitespans other than single space.
-		          [^\S ]\s*     # Either one [\t\r\n\f\v] and zero or more ws,
-		        | \s{2,}        # or two or more consecutive-any-whitespace.
-		        ) # Note: The remaining regex consumes no text at all...
-		        (?=             # Ensure we are not in a blacklist tag.
-		          [^<]*+        # Either zero or more non-"<" {normal*}
-		          (?:           # Begin {(special normal*)*} construct
-		            <           # or a < starting a non-blacklist tag.
-		            (?!/?(?:textarea|pre|script)\b)
-		            [^<]*+      # more non-"<" {normal*}
-		          )*+           # Finish "unrolling-the-loop"
-		          (?:           # Begin alternation group.
-		            <           # Either a blacklist start tag.
-		            (?>textarea|pre|script)\b
-		          | \z          # or end of file.
-		          )             # End alternation group.
-		        )  # If we made it here, we are not in a blacklist tag.
-		        %Six';
-		    $source = preg_replace($regex, " ", $source);
-		    
-		    #if ($input === null) exit("PCRE Error! File too big.\n");
-		    return $source;
+            # For more info check out:
+            # http://stackoverflow.com/questions/5312349/minifying-final-html-output-using-regular-expressions-with-codeigniter
+
+            // Set PCRE recursion limit to sane value = STACKSIZE / 500
+            // ini_set("pcre.recursion_limit", "524"); // 256KB stack. Win32 Apache
+            ini_set("pcre.recursion_limit", "16777");  // 8MB stack. *nix		
+
+            $regex = '%# Collapse whitespace everywhere but in blacklisted elements.
+                (?>             # Match all whitespans other than single space.
+                  [^\S ]\s*     # Either one [\t\r\n\f\v] and zero or more ws,
+                | \s{2,}        # or two or more consecutive-any-whitespace.
+                ) # Note: The remaining regex consumes no text at all...
+                (?=             # Ensure we are not in a blacklist tag.
+                  [^<]*+        # Either zero or more non-"<" {normal*}
+                  (?:           # Begin {(special normal*)*} construct
+                    <           # or a < starting a non-blacklist tag.
+                    (?!/?(?:textarea|pre|script)\b)
+                    [^<]*+      # more non-"<" {normal*}
+                  )*+           # Finish "unrolling-the-loop"
+                  (?:           # Begin alternation group.
+                    <           # Either a blacklist start tag.
+                    (?>textarea|pre|script)\b
+                  | \z          # or end of file.
+                  )             # End alternation group.
+                )  # If we made it here, we are not in a blacklist tag.
+                %Six';
+            $source = preg_replace($regex, " ", $source);
+
+            #if ($input === null) exit("PCRE Error! File too big.\n");
+            return $source;
 		}
 
         /**
-		 * Remove HTML comments
-		 *
+         * Remove HTML comments
+         *
          * @param $html
          * @return string
          */
-		public static function RemoveComments($html)
-		{
-			$dom = new DOMDocument;
-			$dom->loadHtml($html);
+        public static function RemoveComments($html)
+        {
+            $dom = new DOMDocument;
+            $dom->loadHtml($html);
 
-			$xpath = new DOMXPath($dom);
-			foreach ($xpath->query('//comment()') as $comment) {
-			    $comment->parentNode->removeChild($comment);
-			}
+            $xpath = new DOMXPath($dom);
+            foreach ($xpath->query('//comment()') as $comment) {
+                $comment->parentNode->removeChild($comment);
+            }
 
-			$html 	= $xpath->query('/')->item(0);
-			$output = $html instanceof DOMNode ? $dom->saveHTML($html) : '';
+            $html 	= $xpath->query('/')->item(0);
+            $output = $html instanceof DOMNode ? $dom->saveHTML($html) : '';
 
-			return $output;
-		}
+            return $output;
+        }
 
 
 
