@@ -19,7 +19,7 @@
          * Hello Page
          * @link http://www.yourdomain.com/hello
          */
-		public function executeIndex()
+	public function executeIndex()
         {
             // Put your code here
             // ..
@@ -41,4 +41,4 @@
                 ->set('greeting', "We're inside /home/about!")
                 ->render('hello/about');
         }
-	}
+    }
