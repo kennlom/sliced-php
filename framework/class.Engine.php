@@ -28,7 +28,7 @@
         }
 
         /**
-		 * Autoloader
+         * Autoloader
          *
          * @param $class
          */
