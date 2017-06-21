@@ -18,7 +18,7 @@
         private $_template	= 'default';
         private $_title		= '';
         private $_arguments	= array();
-        private $_vars      = array();
+        private $_vars          = array();
 
 
 
@@ -31,14 +31,14 @@
             return new static;
         }		
 
-        public function setLayout($in=false)        { $this->_layout = $in; 	return $this; }		    # Set layout
-        public function setTemplate($in=false)      { $this->_template = $in; 	return $this; }		    # Set template
-        public function setTitle($in='')            { $this->_title = $in; 		return $this; }		    # Set page title
-        public function setArguments($in=array())   { $this->_arguments = $in; 	return $this; }		    # Set request arguments
-        public function getTitle()                  { return $this->_title; } 						    # Get page title
-        public function getRequestParam($name)      { return @$_REQUEST[$name]; } 					    # Get request parameter
-        public function set($name, $value)          { $this->_vars[$name] = $value; return $this; }		# Set object variables
-        public function get($name)                  { return @$this->_vars[$name]; } 					# Get object variables
+        public function setLayout($in=false)        { $this->_layout = $in;     return $this; }         # Set layout
+        public function setTemplate($in=false)      { $this->_template = $in;   return $this; }         # Set template
+        public function setTitle($in='')            { $this->_title = $in;      return $this; }         # Set page title
+        public function setArguments($in=array())   { $this->_arguments = $in;  return $this; }         # Set request arguments
+        public function getTitle()                  { return $this->_title; }                           # Get page title
+        public function getRequestParam($name)      { return @$_REQUEST[$name]; }                       # Get request parameter
+        public function set($name, $value)          { $this->_vars[$name] = $value; return $this; }     # Set object variables
+        public function get($name)                  { return @$this->_vars[$name]; }                    # Get object variables
         public function getVariables()              { return $this->_vars; }
 
         public function setSession($name, $value)	{ Engine::$SessionData[$name] = $value; }
