@@ -1,5 +1,5 @@
 # sliced-php
-Sliced PHP is a super lightweight and performance oriented PHP MVC framework with routing, database orm, templating, and autoloading capabilities. The entire framework is under 15KB including sample code. Despite it's size, the framework have been used as the core for many high performance projects including CRMs.
+Sliced PHP is a super lightweight and performance oriented PHP MVC framework with routing, database orm, templating, and autoloading capabilities. The entire framework is under 15KB including sample code. Despite it's size, the framework have been used as the core for many high performance projects including CRMs, Kelly BlueBook, and Toyota Care.
 
 ## Getting Started
 To start using sliced-php, upload the repository to your server and edit the configurations in `class.Config.php`. Update the path to where you saved the repository.
